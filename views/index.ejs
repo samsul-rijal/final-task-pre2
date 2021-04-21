@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Final Task</title>
+  <link rel="stylesheet" href="stylesheets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="navbar-brand" href="#">Wiki Game</a>
+        </li>
+      </ul>
+      <span class="navbar-text">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <!-- <a class="nav-link" href="#">Add Hero</a> -->
+              <!-- Button trigger modal -->
+            <button type="button" class="btn btn-outline-warning mr-3" data-toggle="modal" data-target="#heroes">
+             Add Hero
+            </button>
+          </li>
+
+          <li class="nav-item">
+            <!-- <a class="nav-link" href="#">Add Type</a> -->
+            <button type="button" class="btn btn-outline-warning mr-3" data-toggle="modal" data-target="#type">
+              Add Type
+             </button>
+          </li>
+        </ul>
+      </span>
+    </div>
+  </nav>
+  <% if(messages.success) {%>
+    <div class="alert alert-success" role="alert">
+      <%= messages.success %>
+    </div>
+    <% } %>
+  
+      <% if(messages.error) {%>
+        <div class="alert alert-danger" role="alert">
+          <%= messages.error %>
+        </div>
+        <% } %>
+
+        <table class="table border-0">
+          <thead>
+              <tr>
+                  <th>No</th>
+                  <th>Heroes Image</th>
+                  <th>Heroes Name</th>
+                  <th>Type Heroes</th>
+                  <th>Detail Heroes</th>
+                  <th>Action</th>
+              </tr>
+          </thead>
+          
+          <tbody>
+              <% for(i=0; i < data.length; i++) { %>
+                  <tr>
+                      <td>
+                          <%= i + 1 %>
+                      </td>
+
+                      <td>
+                        <img src="http://localhost:4000/images/<%= data[i].photo %> " alt="">
+                      </td>
+                      <td>
+                          <%= data[i].name %>
+                      </td>
+                      <td>
+                          <%= data[i].type_name %>
+                      </td>
+                      <td>
+                        <%= data[i].detail %>
+                      </td>
+
+                      <td>
+                          <a href="/edit/<%= data[i].id %>"
+                              class="btn btn-warning">Edit</a>
+                          <a onclick="return confirm('Are you sure want to delete this item?');"
+                              href="/delete/<%= data[i].id %> "
+                              class="btn btn-danger ml-2">Delete</a>
+                      </td>
+                  </tr>
+                  <% } %>
+          </tbody>
+      </table>
+
+  <!-- Modal type -->
+  <div class="modal fade" id="type" tabindex="-1" aria-labelledby="typeLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="typeLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="/type" method="POST">
+            <div class="form-group">
+              <label for="id">Type ID</label>
+              <input type="number" class="form-control" name="id" placeholder="Input Heroes Id" required>
+            </div>
+  
+            <div class="form-group">
+              <label for="name">Type Heroes</label>
+              <input type="text" class="form-control" name="name" placeholder="Input Type Heroes" required>
+            </div>
+  
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+  
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal heroes -->
+  <div class="modal fade" id="heroes" tabindex="-1" aria-labelledby="heroesLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="heroesLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <form action="/" method="POST">
+            <div class="form-group">
+              <label for="name">Heroes Name</label>
+              <input type="text" class="form-control" name="name" placeholder="Input Heroes Name"  required>
+            </div>
+
+            <div class="form-group">
+              <label>Type Heroes</label>
+              <select class="form-control" name="type_id">
+                  <option value="">Select</option>
+                  <option value="1001">1001 - Strength</option>
+                  <option value="1002">1002 - HP</option>
+                  <option value="1003">1003 - Agility</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="photo">Upload Heroes Images</label>
+              <input type="file" class="form-control-file" name="photo">
+            </div>
+
+            <div class="form-group">
+              <label for="detail">Detail Heroes</label>
+              <input class="form-control" placeholder="Input Detail Heroes" name="detail" required>
+            </div>
+  
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+  
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+</body>
+</html>
